@@ -1,12 +1,11 @@
-import { Text, Html, ContactShadows, PerspectiveCamera, OrbitControls, useGLTF } from '@react-three/drei';
+import { Text, Html, ContactShadows, PerspectiveCamera, OrbitControls, useGLTF, Environment } from '@react-three/drei';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { ToneMapping } from '@react-three/postprocessing';
 import { KernelSize } from 'postprocessing';
 import { useRef, useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
-import { useControls } from 'leva';
 import * as THREE from 'three';
-import { ToneMappingMode } from 'postprocessing'
+import { ToneMappingMode } from 'postprocessing';
 
 export default function Experience() {
     const computer = useGLTF('./BedroomCombo.glb');
@@ -20,42 +19,6 @@ export default function Experience() {
     const initialCameraRotation = [0, 0.8, 0];
     const zoomMin = 0.5;
     const zoomMax = 2;
-
-    // Leva controls for the directional light
-    const directionalLightSettings = useControls('Directional Light', {
-        intensity: { value: .8, min: 0, max: 10, step: 0.1 },
-        position: { value: [-10, 10, -3], step: 0.1 },
-        targetPosition: { value: [0, 0, 0], step: 0.1 },
-    });
-
-    // Leva controls for the point light
-    const pointLightSettings = useControls('Point Light', {
-        intensity: { value: .9, min: 0, max: 10, step: 0.1 },
-        position: { value: [1.1, 1.7, .2], step: 0.1 },
-        distance: { value: 100, min: 1, max: 100, step: 1 },
-        decay: { value: 1.5, min: 0, max: 5, step: 0.1 },
-    });
-
-     // Leva controls for the YouTube iframe
-     const youtubeSettings = useControls('YouTube Iframe', {
-        position: { value: [-1.45, 2.10, -2.51], step: 0.01 },
-        rotation: { value: [0, 0, 0], step: 0.01 },
-        scale: { value: [1.4, 1.35, 0.4], step: 0.01 },
-    });
-
-    // Leva controls for the Troverse screen
-    const troverseSettings = useControls('Troverse Screen', {
-        position: { value: [1.91, 1.79, -2.115], step: 0.001 },
-        rotation: { value: [0, -0.31, 0], step: 0.01 },
-        scale: { value: [0.64, 0.65, 0.60], step: 0.01 },
-    });
-
-    // Leva controls for the bloom settings
-    const bloomSettings = useControls('Bloom', {
-        intensity: { value: 0.5, min: 0, max: 3, step: 0.1 },
-        threshold: { value: 0.2, min: 0, max: 1, step: 0.01 },
-        radius: { value: 0.2, min: 0, max: 1, step: 0.01 },
-    });
 
     // Enable shadows
     useEffect(() => {
@@ -99,6 +62,9 @@ export default function Experience() {
 
     return (
         <>
+            {/* HDRI Environment */}
+            <Environment background files="nighttime.hdr" path="/" />
+
             {/* Background */}
             <color args={['#000000']} attach="background" />
 
@@ -119,8 +85,8 @@ export default function Experience() {
             {/* Directional Light */}
             <directionalLight
                 ref={directionalLightRef}
-                intensity={directionalLightSettings.intensity}
-                position={directionalLightSettings.position}
+                intensity={0.8}
+                position={[-10, 10, -3]}
                 castShadow
                 shadow-mapSize-width={4096}
                 shadow-mapSize-height={4096}
@@ -133,14 +99,13 @@ export default function Experience() {
                 shadow-bias={-0.0005}
             />
 
-
             {/* Point Light */}
             <pointLight
                 ref={pointLightRef}
-                intensity={pointLightSettings.intensity}
-                position={pointLightSettings.position}
-                distance={pointLightSettings.distance}
-                decay={pointLightSettings.decay}
+                intensity={0.9}
+                position={[1.1, 1.7, 0.2]}
+                distance={100}
+                decay={1.5}
             />
 
             {/* Computer Model */}
@@ -179,9 +144,9 @@ export default function Experience() {
                     transform
                     wrapperClass="youtubeScreen"
                     distanceFactor={1}
-                    position={youtubeSettings.position}
-                    rotation={youtubeSettings.rotation}
-                    scale={youtubeSettings.scale}
+                    position={[-1.45, 2.10, -2.51]}
+                    rotation={[0, 0, 0]}
+                    scale={[1.4, 1.35, 0.4]}
                     occlude
                 >
                     <div
@@ -214,9 +179,9 @@ export default function Experience() {
                     transform
                     wrapperClass="troverseScreen"
                     distanceFactor={1}
-                    position={troverseSettings.position}
-                    rotation={troverseSettings.rotation}
-                    scale={troverseSettings.scale}
+                    position={[1.91, 1.79, -2.115]}
+                    rotation={[0, -0.31, 0]}
+                    scale={[0.64, 0.65, 0.60]}
                     occlude
                 >
                     <div
@@ -284,12 +249,12 @@ export default function Experience() {
             {/* Post-processing Effects */}
             <EffectComposer multisampling={4}>
                 <Bloom
-                    intensity={bloomSettings.intensity}
-                    luminanceThreshold={bloomSettings.threshold}
-                    luminanceSmoothing={bloomSettings.radius}
+                    intensity={0.5}
+                    luminanceThreshold={0.2}
+                    luminanceSmoothing={0.2}
                     kernelSize={KernelSize.LARGE}
                 />
-                <ToneMapping mode={ ToneMappingMode.ACES_FILMIC } />
+                <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
             </EffectComposer>
         </>
     );
