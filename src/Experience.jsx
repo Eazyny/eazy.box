@@ -163,7 +163,7 @@ export default function Experience() {
                             src="https://www.youtube.com/embed/jfKfPfyJRdk"
                             title="YouTube video player"
                             frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
                             referrerPolicy="strict-origin-when-cross-origin"
                             allowFullScreen
                             style={{
@@ -198,7 +198,7 @@ export default function Experience() {
                             src="https://playtroverse.com"
                             title="Troverse Website"
                             frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
                             referrerPolicy="strict-origin-when-cross-origin"
                             allowFullScreen
                             style={{
