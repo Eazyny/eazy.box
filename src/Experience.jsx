@@ -1,4 +1,4 @@
-import { Text, Html, ContactShadows, PerspectiveCamera, OrbitControls, useGLTF } from '@react-three/drei';
+import { Text, Html, ContactShadows, PerspectiveCamera, OrbitControls, useGLTF, Stats } from '@react-three/drei';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { ToneMapping } from '@react-three/postprocessing';
 import { KernelSize } from 'postprocessing';
@@ -6,7 +6,8 @@ import { useRef, useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import { useControls } from 'leva';
 import * as THREE from 'three';
-import { ToneMappingMode } from 'postprocessing'
+import { PerformanceMonitor } from '@react-three/drei';
+import { ToneMappingMode } from 'postprocessing';
 
 export default function Experience() {
     const computer = useGLTF('./BedroomCombo.glb');
@@ -23,15 +24,15 @@ export default function Experience() {
 
     // Leva controls for the directional light
     const directionalLightSettings = useControls('Directional Light', {
-        intensity: { value: .8, min: 0, max: 10, step: 0.1 },
+        intensity: { value: 0.8, min: 0, max: 10, step: 0.1 },
         position: { value: [-10, 10, -3], step: 0.1 },
         targetPosition: { value: [0, 0, 0], step: 0.1 },
     });
 
     // Leva controls for the point light
     const pointLightSettings = useControls('Point Light', {
-        intensity: { value: .9, min: 0, max: 10, step: 0.1 },
-        position: { value: [1.1, 1.7, .2], step: 0.1 },
+        intensity: { value: 0.9, min: 0, max: 10, step: 0.1 },
+        position: { value: [1.1, 1.7, 0.2], step: 0.1 },
         distance: { value: 100, min: 1, max: 100, step: 1 },
         decay: { value: 1.5, min: 0, max: 5, step: 0.1 },
     });
@@ -41,6 +42,13 @@ export default function Experience() {
         intensity: { value: 0.5, min: 0, max: 3, step: 0.1 },
         threshold: { value: 0.2, min: 0, max: 1, step: 0.01 },
         radius: { value: 0.2, min: 0, max: 1, step: 0.01 },
+    });
+
+    // Leva controls for the YouTube iframe
+    const youtubeSettings = useControls('YouTube Iframe', {
+        position: { value: [-1.45, 2.10, -2.51], step: 0.01 },
+        rotation: { value: [0, 0, 0], step: 0.01 },
+        scale: { value: [1.4, 1.35, 0.4], step: 0.01 },
     });
 
     // Enable shadows
@@ -85,6 +93,10 @@ export default function Experience() {
 
     return (
         <>
+            {/* Performance Stats */}
+            <PerformanceMonitor />
+            <Stats showPanel={0} />
+
             {/* Background */}
             <color args={['#000000']} attach="background" />
 
@@ -118,7 +130,6 @@ export default function Experience() {
                 shadow-camera-far={50}
                 shadow-bias={-0.0005}
             />
-
 
             {/* Point Light */}
             <pointLight
@@ -155,6 +166,41 @@ export default function Experience() {
                                 width: '100%',
                                 height: '100%',
                                 border: 'none',
+                            }}
+                        />
+                    </div>
+                </Html>
+
+                {/* YouTube Screen */}
+                <Html
+                    transform
+                    wrapperClass="youtubeScreen"
+                    distanceFactor={1}
+                    position={youtubeSettings.position}
+                    rotation={youtubeSettings.rotation}
+                    scale={youtubeSettings.scale}
+                    occlude
+                >
+                    <div
+                        style={{
+                            width: '560px',
+                            height: '315px',
+                            border: 'none',
+                            borderRadius: '10px',
+                        }}
+                    >
+                        <iframe
+                            width="560"
+                            height="315"
+                            src="https://www.youtube.com/embed/jfKfPfyJRdk"
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen
+                            style={{
+                                width: '100%',
+                                height: '100%',
                             }}
                         />
                     </div>
@@ -205,7 +251,7 @@ export default function Experience() {
                     luminanceSmoothing={bloomSettings.radius}
                     kernelSize={KernelSize.LARGE}
                 />
-                <ToneMapping mode={ ToneMappingMode.ACES_FILMIC } />
+                <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
             </EffectComposer>
         </>
     );
