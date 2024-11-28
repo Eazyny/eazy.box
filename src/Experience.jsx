@@ -36,6 +36,20 @@ export default function Experience() {
         decay: { value: 1.5, min: 0, max: 5, step: 0.1 },
     });
 
+     // Leva controls for the YouTube iframe
+     const youtubeSettings = useControls('YouTube Iframe', {
+        position: { value: [-1.45, 2.10, -2.51], step: 0.01 },
+        rotation: { value: [0, 0, 0], step: 0.01 },
+        scale: { value: [1.4, 1.35, 0.4], step: 0.01 },
+    });
+
+    // Leva controls for the Troverse screen
+    const troverseSettings = useControls('Troverse Screen', {
+        position: { value: [1.91, 1.79, -2.115], step: 0.001 },
+        rotation: { value: [0, -0.31, 0], step: 0.01 },
+        scale: { value: [0.64, 0.65, 0.60], step: 0.01 },
+    });
+
     // Leva controls for the bloom settings
     const bloomSettings = useControls('Bloom', {
         intensity: { value: 0.5, min: 0, max: 3, step: 0.1 },
@@ -155,6 +169,76 @@ export default function Experience() {
                                 width: '100%',
                                 height: '100%',
                                 border: 'none',
+                            }}
+                        />
+                    </div>
+                </Html>
+
+                {/* YouTube Iframe */}
+                <Html
+                    transform
+                    wrapperClass="youtubeScreen"
+                    distanceFactor={1}
+                    position={youtubeSettings.position}
+                    rotation={youtubeSettings.rotation}
+                    scale={youtubeSettings.scale}
+                    occlude
+                >
+                    <div
+                        style={{
+                            width: '560px',
+                            height: '315px',
+                            border: 'none',
+                            borderRadius: '10px',
+                        }}
+                    >
+                        <iframe
+                            width="560"
+                            height="315"
+                            src="https://www.youtube.com/embed/jfKfPfyJRdk"
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                            }}
+                        />
+                    </div>
+                </Html>
+
+                {/* Troverse Screen */}
+                <Html
+                    transform
+                    wrapperClass="troverseScreen"
+                    distanceFactor={1}
+                    position={troverseSettings.position}
+                    rotation={troverseSettings.rotation}
+                    scale={troverseSettings.scale}
+                    occlude
+                >
+                    <div
+                        style={{
+                            width: '560px',
+                            height: '315px',
+                            border: 'none',
+                            borderRadius: '10px',
+                        }}
+                    >
+                        <iframe
+                            width="560"
+                            height="315"
+                            src="https://playtroverse.com"
+                            title="Troverse Website"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen
+                            style={{
+                                width: '100%',
+                                height: '100%',
                             }}
                         />
                     </div>
