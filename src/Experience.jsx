@@ -18,7 +18,7 @@ export default function Experience() {
     const initialCameraPosition = [1.7, 0.4, -1.2];
     const initialCameraRotation = [0, 0.8, 0];
     const zoomMin = 0.5;
-    const zoomMax = 2;
+    const zoomMax = 3;
 
     // Enable shadows
     useEffect(() => {
