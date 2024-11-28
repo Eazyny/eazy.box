@@ -51,6 +51,13 @@ export default function Experience() {
         scale: { value: [1.4, 1.35, 0.4], step: 0.01 },
     });
 
+    // Leva controls for the Troverse screen
+    const troverseSettings = useControls('Troverse Screen', {
+        position: { value: [1.91, 1.79, -2.115], step: 0.001 },
+        rotation: { value: [0, -0.31, 0], step: 0.01 },
+        scale: { value: [0.64, 0.65, 0.60], step: 0.01 },
+    });
+
     // Enable shadows
     useEffect(() => {
         gl.shadowMap.enabled = true;
@@ -142,6 +149,7 @@ export default function Experience() {
 
             {/* Computer Model */}
             <primitive object={computer.scene} position-y={-1.5} position-x={0} position-z={0}>
+                {/* HTML Screens */}
                 <Html
                     transform
                     wrapperClass="htmlScreen"
@@ -194,6 +202,41 @@ export default function Experience() {
                             height="315"
                             src="https://www.youtube.com/embed/jfKfPfyJRdk"
                             title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                            }}
+                        />
+                    </div>
+                </Html>
+
+                {/* Troverse Screen */}
+                <Html
+                    transform
+                    wrapperClass="troverseScreen"
+                    distanceFactor={1}
+                    position={troverseSettings.position}
+                    rotation={troverseSettings.rotation}
+                    scale={troverseSettings.scale}
+                    occlude
+                >
+                    <div
+                        style={{
+                            width: '560px',
+                            height: '315px',
+                            border: 'none',
+                            borderRadius: '10px',
+                        }}
+                    >
+                        <iframe
+                            width="560"
+                            height="315"
+                            src="https://playtroverse.com"
+                            title="Troverse Website"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             referrerPolicy="strict-origin-when-cross-origin"
