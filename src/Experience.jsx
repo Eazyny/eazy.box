@@ -17,7 +17,7 @@ import { ToneMappingMode } from 'postprocessing';
 
 export default function Experience() {
     // Load the GLTF model (tracked by Suspense)
-    const computer = useGLTF('./BedroomCombo.glb');
+    const computer = useGLTF('./BedRoomCombo1.glb');
 
     // Load the skybox (tracked by Suspense)
     const skyboxTexture = useCubeTexture(
