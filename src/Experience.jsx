@@ -235,37 +235,7 @@ export default function Experience() {
             <ContactShadows position-y={-1.4} opacity={0.4} scale={5} blur={2.4} />
 
             {/* Text */}
-            <Text
-                font="./bangers-v20-latin-regular.woff"
-                fontSize={1}
-                position={[0.5, 3, 2.855]}
-                rotation-y={3.15}
-                maxWidth={2}
-            >
-                WELCOME
-            </Text>
-            <Text
-                font="./bangers-v20-latin-regular.woff"
-                fontSize={0.3}
-                position={[0.5, 2.2, 2.855]}
-                rotation-y={3.15}
-                maxWidth={2}
-            >
-                To my Portfolio
-            </Text>
-            <Text
-                font="./bangers-v20-latin-regular.woff"
-                fontSize={0.28}
-                position={[0.5, 1, 2.855]}
-                rotation-y={3.15}
-                maxWidth={3.5}
-                textAlign="center"
-                anchorX="center"
-                anchorY="middle"
-            >
-                Feel free to explore. This project is my WIP Portfolio. I'm still working on it,
-                so stay tuned for updates! Don't forget to stop by the PC to contact me!
-            </Text>
+            
 
             {/* Post-processing Effects */}
             <EffectComposer multisampling={4}>
