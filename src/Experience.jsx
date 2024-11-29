@@ -5,7 +5,8 @@ import {
     PerspectiveCamera,
     OrbitControls,
     useGLTF,
-} from '@react-three/drei';
+    useCubeTexture,
+} from '@react-three/drei'; // Use useCubeTexture for skybox
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { ToneMapping } from '@react-three/postprocessing';
 import { KernelSize } from 'postprocessing';
@@ -15,20 +16,19 @@ import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
 export default function Experience() {
+    // Load the GLTF model (tracked by Suspense)
     const computer = useGLTF('./BedroomCombo.glb');
+
+    // Load the skybox (tracked by Suspense)
+    const skyboxTexture = useCubeTexture(
+        ['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png'],
+        { path: '/' }
+    );
+
     const cameraRef = useRef();
     const directionalLightRef = useRef();
     const pointLightRef = useRef();
     const { gl, scene } = useThree();
-
-    const skyboxImages = [
-        '/right.png', // Positive X
-        '/left.png',  // Negative X
-        '/top.png',   // Positive Y
-        '/bottom.png', // Negative Y
-        '/front.png', // Positive Z
-        '/back.png',  // Negative Z
-    ];
 
     // Initial camera settings
     const initialCameraPosition = [1.7, 0.4, -1.2];
@@ -38,14 +38,8 @@ export default function Experience() {
 
     // Set up the skybox
     useEffect(() => {
-        const loader = new THREE.CubeTextureLoader();
-        const texture = loader.load(skyboxImages);
-        scene.background = texture;
-
-        return () => {
-            scene.background = null; // Clean up on component unmount
-        };
-    }, [scene, skyboxImages]);
+        scene.background = skyboxTexture;
+    }, [scene, skyboxTexture]);
 
     // Enable shadows
     useEffect(() => {
@@ -89,9 +83,6 @@ export default function Experience() {
 
     return (
         <>
-            {/* Removed HDRI Environment */}
-            {/* Replaced with skybox */}
-
             {/* Background */}
             <color args={['#000000']} attach="background" />
 
@@ -106,7 +97,7 @@ export default function Experience() {
                 onUpdate={(self) => self.updateProjectionMatrix()}
             />
 
-            {/* OrbitControls for Camera Interaction */}
+            {/* OrbitControls */}
             <OrbitControls target={[0, 1, 0]} maxPolarAngle={Math.PI / 2} />
 
             {/* Directional Light */}
@@ -137,6 +128,7 @@ export default function Experience() {
 
             {/* Computer Model */}
             <primitive object={computer.scene} position-y={-1.5} position-x={0} position-z={0}>
+                {/* HTML Screen */}
                 <Html
                     transform
                     wrapperClass="htmlScreen"
@@ -271,8 +263,8 @@ export default function Experience() {
                 anchorX="center"
                 anchorY="middle"
             >
-                Feel free to explore. This project is my WIP Portfolio. I'm still working on it, so stay tuned for
-                updates! Don't forget to stop by the PC to contact me!
+                Feel free to explore. This project is my WIP Portfolio. I'm still working on it,
+                so stay tuned for updates! Don't forget to stop by the PC to contact me!
             </Text>
 
             {/* Post-processing Effects */}
