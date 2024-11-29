@@ -17,7 +17,7 @@ import { ToneMappingMode } from 'postprocessing';
 
 export default function Experience() {
     // Load the GLTF model (tracked by Suspense)
-    const computer = useGLTF('./BedRoomCombo1.glb');
+    const computer = useGLTF('./BedRoomCombo.glb');
 
     // Load the skybox (tracked by Suspense)
     const skyboxTexture = useCubeTexture(
@@ -120,8 +120,8 @@ export default function Experience() {
             {/* Point Light */}
             <pointLight
                 ref={pointLightRef}
-                intensity={0.9}
-                position={[1.1, 1.7, 0.2]}
+                intensity={1}
+                position={[.5, 1.8, -.3]}
                 distance={100}
                 decay={1.5}
             />
@@ -233,8 +233,6 @@ export default function Experience() {
 
             {/* Shadows */}
             <ContactShadows position-y={-1.4} opacity={0.4} scale={5} blur={2.4} />
-
-            {/* Text */}
             
 
             {/* Post-processing Effects */}
