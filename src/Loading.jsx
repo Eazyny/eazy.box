@@ -1,22 +1,26 @@
 import { Html, useProgress } from '@react-three/drei';
+import './MatrixLoader.css'; // Add this CSS for styling
 
 function Loader() {
   const { progress } = useProgress();
+
   return (
     <Html center>
-      <div style={{ textAlign: 'center', color: 'white' }}>
-        <div style={{ width: '100%', background: '#333', borderRadius: '5px', overflow: 'hidden' }}>
-          <div
-            style={{
-              width: `${progress}%`,
-              background: '#00df00',
-              height: '10px',
-              borderRadius: '5px',
-            }}
-          ></div>
+      <div className="matrix-loader">
+        <div className="matrix-rain">
+          {[...Array(20)].map((_, i) => (
+            <span key={i} className="matrix-column">
+              {''.split('').map((char, j) => (
+                <span key={j}>{char}</span>
+              ))}
+            </span>
+          ))}
         </div>
-        <div style={{ marginTop: '10px' }}>
-          Loading... {progress.toFixed(2)}%
+        <div className="loader-container">
+          <div className="loader-bar">
+            <div className="loader-progress" style={{ width: `${progress}%` }}></div>
+          </div>
+          <p className="loader-text"> {progress.toFixed(2)}%</p>
         </div>
       </div>
     </Html>
