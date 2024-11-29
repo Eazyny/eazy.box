@@ -1,4 +1,11 @@
-import { Text, Html, ContactShadows, PerspectiveCamera, OrbitControls, useGLTF, Environment } from '@react-three/drei';
+import {
+    Text,
+    Html,
+    ContactShadows,
+    PerspectiveCamera,
+    OrbitControls,
+    useGLTF,
+} from '@react-three/drei';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { ToneMapping } from '@react-three/postprocessing';
 import { KernelSize } from 'postprocessing';
@@ -12,13 +19,33 @@ export default function Experience() {
     const cameraRef = useRef();
     const directionalLightRef = useRef();
     const pointLightRef = useRef();
-    const { gl } = useThree();
+    const { gl, scene } = useThree();
+
+    const skyboxImages = [
+        '/right.png', // Positive X
+        '/left.png',  // Negative X
+        '/top.png',   // Positive Y
+        '/bottom.png', // Negative Y
+        '/front.png', // Positive Z
+        '/back.png',  // Negative Z
+    ];
 
     // Initial camera settings
     const initialCameraPosition = [1.7, 0.4, -1.2];
     const initialCameraRotation = [0, 0.8, 0];
     const zoomMin = 0.5;
     const zoomMax = 3;
+
+    // Set up the skybox
+    useEffect(() => {
+        const loader = new THREE.CubeTextureLoader();
+        const texture = loader.load(skyboxImages);
+        scene.background = texture;
+
+        return () => {
+            scene.background = null; // Clean up on component unmount
+        };
+    }, [scene, skyboxImages]);
 
     // Enable shadows
     useEffect(() => {
@@ -62,8 +89,8 @@ export default function Experience() {
 
     return (
         <>
-            {/* HDRI Environment */}
-            <Environment background files="nighttime.hdr" path="/" />
+            {/* Removed HDRI Environment */}
+            {/* Replaced with skybox */}
 
             {/* Background */}
             <color args={['#000000']} attach="background" />
@@ -135,6 +162,8 @@ export default function Experience() {
                                 height: '100%',
                                 border: 'none',
                             }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                            allowFullScreen
                         />
                     </div>
                 </Html>
