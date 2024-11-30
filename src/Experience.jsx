@@ -11,6 +11,7 @@ import { KernelSize } from 'postprocessing';
 import { useRef, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
+import { useControls } from 'leva'; // Add Leva controls
 import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
@@ -30,16 +31,39 @@ export default function Experience() {
     const { gl, scene } = useThree();
 
     // Initial camera settings
-    const initialCameraPosition = [0.6, 0.4, -0.5];
-    const initialCameraRotation = [0, 2.8, 0];
-    const mainCameraPosition = [0.6, 0.4, -0.5];
-    const mainCameraRotation = [0, 6.4, 0];
-    const pcStationPosition = [1.6, 0.4, -1.2];
-    const pcStationRotation = [0, 6.4, 0];
-    const tvStationPosition = [-0.6, 0.4, -0.6];
-    const tvStationRotation = [0, 7, 0];
+    const initialCameraPosition = [5, 1.3, 0.6];
+    const initialCameraRotation = [0.1, 1.5, -0.1];
+    const WelcomePosition = [0.6, 0.4, -0.5];
+    const WelcomeRotation = [0, 2.8, 0];
+    const mainCameraPosition = [5, 1.3, 0.6];
+    const mainCameraRotation = [0.1, 1.5, -0.1];
+    const pcStationPosition = [1.4, 0.4, -1.2];
+    const pcStationRotation = [0, 0, 0];
+    const tvStationPosition = [-0.4, 0.6, -0.7];
+    const tvStationRotation = [0, .8, 0];
     const zoomMin = 1;
     const zoomMax = 4;
+
+    // Add Leva controls for camera settings
+    const { cameraPosition, cameraRotation, fov } = useControls('Camera', {
+        cameraPosition: {
+            value: initialCameraPosition,
+            step: 0.1,
+            label: 'Position',
+        },
+        cameraRotation: {
+            value: initialCameraRotation,
+            step: 0.1,
+            label: 'Rotation',
+        },
+        fov: {
+            value: 80,
+            min: 10,
+            max: 120,
+            step: 1,
+            label: 'Field of View',
+        },
+    });
 
     // Camera animation state
     const [{ position, rotation }, setCamera] = useSpring(() => ({
@@ -48,11 +72,26 @@ export default function Experience() {
         config: { tension: 280, friction: 60 },
     }));
 
+    // Apply Leva changes to camera spring and update FOV
+    useEffect(() => {
+        setCamera({
+            position: cameraPosition,
+            rotation: cameraRotation,
+        });
+
+        if (cameraRef.current) {
+            cameraRef.current.fov = fov;
+            cameraRef.current.updateProjectionMatrix();
+        }
+    }, [cameraPosition, cameraRotation, fov, setCamera]);
+
     // Expose setCamera to the global scope
     useEffect(() => {
         window.setCamera = setCamera;
         window.mainCameraPosition = mainCameraPosition;
         window.mainCameraRotation = mainCameraRotation;
+        window.WelcomePosition = WelcomePosition;
+        window.WelcomeRotation = WelcomeRotation;
         window.pcStationPosition = pcStationPosition;
         window.pcStationRotation = pcStationRotation;
         window.tvStationPosition = tvStationPosition;
@@ -117,10 +156,15 @@ export default function Experience() {
         setTimeout(showButtons, 3000); // Adjust the timeout as needed
     }, []);
 
-    // Update camera position and rotation
+    // Update camera position and rotation with smooth rotation
     useFrame(() => {
-        cameraRef.current.position.lerp(new THREE.Vector3(...position.get()), 0.1);
-        cameraRef.current.rotation.set(...rotation.get());
+        const currentPosition = new THREE.Vector3(...position.get());
+        cameraRef.current.position.lerp(currentPosition, 0.1);
+
+        const targetQuaternion = new THREE.Quaternion().setFromEuler(
+            new THREE.Euler(...rotation.get())
+        );
+        cameraRef.current.quaternion.slerp(targetQuaternion, 0.1);
     });
 
     return (
