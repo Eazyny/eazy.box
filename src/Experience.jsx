@@ -46,9 +46,9 @@ export default function Experience() {
         position: initialCameraPosition,
         rotation: initialCameraRotation,
         config: {
-            tension: 55, // Higher tension makes the animation more "snappy"
+            tension: 30, // Higher tension makes the animation more "snappy"
             friction: 10, // Lower friction allows for more bounce
-            clamp: false, // Prevents overshooting
+            clamp: true, // Prevents overshooting
             precision: 0.01, // Smooths the final resting position
         },
     }));
