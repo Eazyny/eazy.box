@@ -104,6 +104,19 @@ export default function Experience() {
         };
     }, [gl, zoomMin, zoomMax]);
 
+    // Show buttons after loader is done
+    useEffect(() => {
+        const showButtons = () => {
+            const buttons = document.querySelector('.camera-buttons');
+            if (buttons) {
+                buttons.style.display = 'flex';
+            }
+        };
+
+        // Simulate loader completion
+        setTimeout(showButtons, 3000); // Adjust the timeout as needed
+    }, []);
+
     // Update camera position and rotation
     useFrame(() => {
         cameraRef.current.position.lerp(new THREE.Vector3(...position.get()), 0.1);
