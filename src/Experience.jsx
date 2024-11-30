@@ -30,10 +30,34 @@ export default function Experience() {
     const { gl, scene } = useThree();
 
     // Initial camera settings
-    const initialCameraPosition = [.6, 0.4, -.5];
+    const initialCameraPosition = [0.6, 0.4, -0.5];
     const initialCameraRotation = [0, 2.8, 0];
+    const mainCameraPosition = [0.6, 0.4, -0.5];
+    const mainCameraRotation = [0, 6.4, 0];
+    const pcStationPosition = [1.6, 0.4, -1.2];
+    const pcStationRotation = [0, 6.4, 0];
+    const tvStationPosition = [-0.6, 0.4, -0.6];
+    const tvStationRotation = [0, 7, 0];
     const zoomMin = 1;
     const zoomMax = 4;
+
+    // Camera animation state
+    const [{ position, rotation }, setCamera] = useSpring(() => ({
+        position: initialCameraPosition,
+        rotation: initialCameraRotation,
+        config: { tension: 280, friction: 60 },
+    }));
+
+    // Expose setCamera to the global scope
+    useEffect(() => {
+        window.setCamera = setCamera;
+        window.mainCameraPosition = mainCameraPosition;
+        window.mainCameraRotation = mainCameraRotation;
+        window.pcStationPosition = pcStationPosition;
+        window.pcStationRotation = pcStationRotation;
+        window.tvStationPosition = tvStationPosition;
+        window.tvStationRotation = tvStationRotation;
+    }, [setCamera]);
 
     // Set up the skybox
     useEffect(() => {
@@ -80,6 +104,12 @@ export default function Experience() {
         };
     }, [gl, zoomMin, zoomMax]);
 
+    // Update camera position and rotation
+    useFrame(() => {
+        cameraRef.current.position.lerp(new THREE.Vector3(...position.get()), 0.1);
+        cameraRef.current.rotation.set(...rotation.get());
+    });
+
     return (
         <>
             {/* Background */}
@@ -117,7 +147,7 @@ export default function Experience() {
             <pointLight
                 ref={pointLightRef}
                 intensity={1}
-                position={[.5, 1.8, -.3]}
+                position={[0.5, 1.8, -0.3]}
                 distance={100}
                 decay={1.5}
             />
@@ -229,7 +259,6 @@ export default function Experience() {
 
             {/* Shadows */}
             <ContactShadows position-y={-1.4} opacity={0.4} scale={5} blur={2.4} />
-
 
             {/* Post-processing Effects */}
             <EffectComposer multisampling={4}>
