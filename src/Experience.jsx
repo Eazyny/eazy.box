@@ -41,11 +41,16 @@ export default function Experience() {
     const zoomMin = 1;
     const zoomMax = 4;
 
-    // Camera animation state
+    // Camera animation state with bounce effect
     const [{ position, rotation }, setCamera] = useSpring(() => ({
         position: initialCameraPosition,
         rotation: initialCameraRotation,
-        config: { tension: 280, friction: 60 },
+        config: {
+            tension: 55, // Higher tension makes the animation more "snappy"
+            friction: 10, // Lower friction allows for more bounce
+            clamp: false, // Prevents overshooting
+            precision: 0.01, // Smooths the final resting position
+        },
     }));
 
     // Expose setCamera to the global scope
