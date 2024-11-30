@@ -11,15 +11,12 @@ import { KernelSize } from 'postprocessing';
 import { useRef, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
-import { useControls } from 'leva'; // Add Leva controls
 import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
 export default function Experience() {
-    // Load the GLTF model (tracked by Suspense)
     const computer = useGLTF('./BedRoomCombo.glb');
 
-    // Load the skybox (tracked by Suspense)
     const skyboxTexture = useCubeTexture(
         ['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png'],
         { path: '/' }
@@ -40,30 +37,9 @@ export default function Experience() {
     const pcStationPosition = [1.4, 0.4, -1.2];
     const pcStationRotation = [0, 0, 0];
     const tvStationPosition = [-0.4, 0.6, -0.7];
-    const tvStationRotation = [0, .8, 0];
+    const tvStationRotation = [0, 0.8, 0];
     const zoomMin = 1;
     const zoomMax = 4;
-
-    // Add Leva controls for camera settings
-    const { cameraPosition, cameraRotation, fov } = useControls('Camera', {
-        cameraPosition: {
-            value: initialCameraPosition,
-            step: 0.1,
-            label: 'Position',
-        },
-        cameraRotation: {
-            value: initialCameraRotation,
-            step: 0.1,
-            label: 'Rotation',
-        },
-        fov: {
-            value: 80,
-            min: 10,
-            max: 120,
-            step: 1,
-            label: 'Field of View',
-        },
-    });
 
     // Camera animation state
     const [{ position, rotation }, setCamera] = useSpring(() => ({
@@ -71,19 +47,6 @@ export default function Experience() {
         rotation: initialCameraRotation,
         config: { tension: 280, friction: 60 },
     }));
-
-    // Apply Leva changes to camera spring and update FOV
-    useEffect(() => {
-        setCamera({
-            position: cameraPosition,
-            rotation: cameraRotation,
-        });
-
-        if (cameraRef.current) {
-            cameraRef.current.fov = fov;
-            cameraRef.current.updateProjectionMatrix();
-        }
-    }, [cameraPosition, cameraRotation, fov, setCamera]);
 
     // Expose setCamera to the global scope
     useEffect(() => {
@@ -98,35 +61,30 @@ export default function Experience() {
         window.tvStationRotation = tvStationRotation;
     }, [setCamera]);
 
-    // Set up the skybox
     useEffect(() => {
         scene.background = skyboxTexture;
     }, [scene, skyboxTexture]);
 
-    // Enable shadows
     useEffect(() => {
         gl.shadowMap.enabled = true;
-        gl.shadowMap.type = THREE.PCFSoftShadowMap; // Ensure shadows are smooth
+        gl.shadowMap.type = THREE.PCFSoftShadowMap;
     }, [gl]);
 
-    // Enable shadows for the GLTF model
     useEffect(() => {
         computer.scene.traverse((child) => {
             if (child.isMesh) {
-                child.castShadow = true; // Allow meshes to cast shadows
-                child.receiveShadow = true; // Allow meshes to receive shadows
+                child.castShadow = true;
+                child.receiveShadow = true;
             }
         });
     }, [computer]);
 
-    // Set the initial rotation of the camera
     useEffect(() => {
         if (cameraRef.current) {
             cameraRef.current.rotation.set(...initialCameraRotation);
         }
     }, []);
 
-    // Add zoom interaction handling
     useEffect(() => {
         const handleWheel = (event) => {
             const newZoom = Math.max(
@@ -143,7 +101,6 @@ export default function Experience() {
         };
     }, [gl, zoomMin, zoomMax]);
 
-    // Show buttons after loader is done
     useEffect(() => {
         const showButtons = () => {
             const buttons = document.querySelector('.camera-buttons');
@@ -152,11 +109,9 @@ export default function Experience() {
             }
         };
 
-        // Simulate loader completion
-        setTimeout(showButtons, 3000); // Adjust the timeout as needed
+        setTimeout(showButtons, 3000);
     }, []);
 
-    // Update camera position and rotation with smooth rotation
     useFrame(() => {
         const currentPosition = new THREE.Vector3(...position.get());
         cameraRef.current.position.lerp(currentPosition, 0.1);
@@ -248,7 +203,7 @@ export default function Experience() {
                     transform
                     wrapperClass="youtubeScreen"
                     distanceFactor={1}
-                    position={[-1.45, 2.10, -2.51]}
+                    position={[-1.45, 2.1, -2.51]}
                     rotation={[0, 0, 0]}
                     scale={[1.4, 1.35, 0.4]}
                     occlude
@@ -285,7 +240,7 @@ export default function Experience() {
                     distanceFactor={1}
                     position={[1.91, 1.79, -2.115]}
                     rotation={[0, -0.31, 0]}
-                    scale={[0.64, 0.65, 0.60]}
+                    scale={[0.64, 0.65, 0.6]}
                     occlude
                 >
                     <div
