@@ -45,7 +45,7 @@ export default function Experience() {
     const [{ position, rotation }, setCamera] = useSpring(() => ({
         position: initialCameraPosition,
         rotation: initialCameraRotation,
-        config: { tension: 280, friction: 20 },
+        config: { tension: 250, friction: 35, precision: 0.001 },
     }));
 
     // Expose setCamera to the global scope
