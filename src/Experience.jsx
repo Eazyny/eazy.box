@@ -1,9 +1,7 @@
 import {
-    Text,
     Html,
     ContactShadows,
     PerspectiveCamera,
-    OrbitControls,
     useGLTF,
     useCubeTexture,
 } from '@react-three/drei'; // Use useCubeTexture for skybox
@@ -11,7 +9,8 @@ import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { ToneMapping } from '@react-three/postprocessing';
 import { KernelSize } from 'postprocessing';
 import { useRef, useEffect } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useThree, useFrame } from '@react-three/fiber';
+import { useSpring, animated } from '@react-spring/three';
 import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
@@ -31,10 +30,10 @@ export default function Experience() {
     const { gl, scene } = useThree();
 
     // Initial camera settings
-    const initialCameraPosition = [1.7, 0.4, -1.2];
-    const initialCameraRotation = [0, 0.8, 0];
-    const zoomMin = 0.5;
-    const zoomMax = 3;
+    const initialCameraPosition = [.6, 0.4, -.5];
+    const initialCameraRotation = [0, 2.8, 0];
+    const zoomMin = 1;
+    const zoomMax = 4;
 
     // Set up the skybox
     useEffect(() => {
@@ -91,14 +90,11 @@ export default function Experience() {
                 ref={cameraRef}
                 makeDefault
                 position={initialCameraPosition}
-                fov={60}
+                fov={80}
                 near={0.1}
                 far={1000}
                 onUpdate={(self) => self.updateProjectionMatrix()}
             />
-
-            {/* OrbitControls */}
-            <OrbitControls target={[0, 1, 0]} maxPolarAngle={Math.PI / 2} />
 
             {/* Directional Light */}
             <directionalLight
@@ -233,7 +229,7 @@ export default function Experience() {
 
             {/* Shadows */}
             <ContactShadows position-y={-1.4} opacity={0.4} scale={5} blur={2.4} />
-            
+
 
             {/* Post-processing Effects */}
             <EffectComposer multisampling={4}>
