@@ -5,6 +5,7 @@ import { KernelSize } from 'postprocessing';
 import { useRef, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { useSpring } from '@react-spring/three';
+import { useControls } from 'leva'; // Leva for controls
 import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
@@ -34,6 +35,29 @@ export default function Experience() {
     const tvStationRotation = [0, 0.8, 0];
     const zoomMin = 1;
     const zoomMax = 4;
+
+    // Add Leva controls for the Troverse Screen
+    const {
+        troversePosition,
+        troverseRotation,
+        troverseScale,
+    } = useControls('Troverse Screen', {
+        troversePosition: {
+            value: [1.90, 1.79, -2.115],
+            step: 0.001,
+            label: 'Position',
+        },
+        troverseRotation: {
+            value: [0, -0.29, 0],
+            step: 0.001,
+            label: 'Rotation',
+        },
+        troverseScale: {
+            value: [0.30, 0.305, 0.01],
+            step: 0.001,
+            label: 'Scale',
+        },
+    });
 
     // Camera animation state
     const [{ position, rotation }, setCamera] = useSpring(() => ({
@@ -192,7 +216,7 @@ export default function Experience() {
                     </div>
                 </Html>
 
-                {/* YouTube Iframe */}
+                {/* YouTube Screen */}
                 <Html
                     transform
                     wrapperClass="youtubeScreen"
@@ -232,32 +256,29 @@ export default function Experience() {
                     transform
                     wrapperClass="troverseScreen"
                     distanceFactor={1}
-                    position={[1.91, 1.79, -2.115]}
-                    rotation={[0, -0.31, 0]}
-                    scale={[0.64, 0.65, 0.6]}
+                    position={troversePosition}
+                    rotation={troverseRotation}
+                    scale={troverseScale}
                     occlude
                 >
                     <div
                         style={{
-                            width: '560px',
-                            height: '315px',
+                            width: '1200px',
+                            height: '680px',
+                            backgroundColor: 'black',
                             border: 'none',
                             borderRadius: '10px',
                         }}
                     >
                         <iframe
-                            width="560"
-                            height="315"
-                            src="https://playtroverse.com"
-                            title="Troverse Website"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                            referrerPolicy="strict-origin-when-cross-origin"
-                            allowFullScreen
+                            src="https://playtroverse.com/"
                             style={{
                                 width: '100%',
                                 height: '100%',
+                                border: 'none',
                             }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                            allowFullScreen
                         />
                     </div>
                 </Html>
