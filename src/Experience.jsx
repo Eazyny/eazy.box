@@ -232,15 +232,15 @@ export default function Experience() {
                     transform
                     wrapperClass="troverseScreen"
                     distanceFactor={1}
-                    position={[1.905, 1.789, -2.115]}
-                    rotation={[-0.01, -0.295, 0]}
-                    scale={[0.642, 0.65, 0.6]}
+                    position={[1.9075, 1.788, -2.115]}
+                    rotation={[-0.0001, -0.295, 0]}
+                    scale={[0.30, 0.258, 0.6]}
                     occlude
                 >
                     <div
                         style={{
-                            width: '560px',
-                            height: '315px',
+                            width: '1200px',
+                            height: '800px',
                             border: 'none',
                             borderRadius: '10px',
                         }}
