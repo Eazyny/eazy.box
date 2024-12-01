@@ -246,8 +246,8 @@ export default function Experience() {
                         }}
                     >
                         <iframe
-                            width="560"
-                            height="315"
+                            width="1200"
+                            height="800"
                             src="https://playtroverse.com"
                             title="Troverse Website"
                             frameBorder="0"
