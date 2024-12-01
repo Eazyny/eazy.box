@@ -1,16 +1,10 @@
-import {
-    Html,
-    ContactShadows,
-    PerspectiveCamera,
-    useGLTF,
-    useCubeTexture,
-} from '@react-three/drei'; // Use useCubeTexture for skybox
+import { Html, ContactShadows, PerspectiveCamera, useGLTF, useCubeTexture } from '@react-three/drei'; // Use useCubeTexture for skybox
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { ToneMapping } from '@react-three/postprocessing';
 import { KernelSize } from 'postprocessing';
 import { useRef, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
-import { useSpring, animated } from '@react-spring/three';
+import { useSpring } from '@react-spring/three';
 import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
