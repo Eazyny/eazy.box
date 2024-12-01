@@ -230,7 +230,7 @@ export default function Experience() {
                 {/* Troverse Screen */}
                 <Html
                     transform
-                    wrapperClass="troverseScreen"
+                    wrapperClass="BlockchaineazyScreen"
                     distanceFactor={1}
                     position={[1.9075, 1.788, -2.115]}
                     rotation={[-0.0001, -0.295, 0]}
@@ -248,8 +248,8 @@ export default function Experience() {
                         <iframe
                             width="1200"
                             height="800"
-                            src="https://playtroverse.com"
-                            title="Troverse Website"
+                            src="https://blockchaineazy.box"
+                            title="Blockchaineazy.box"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
                             referrerPolicy="strict-origin-when-cross-origin"
