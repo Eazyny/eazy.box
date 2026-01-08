@@ -8,7 +8,7 @@ import { useSpring } from '@react-spring/three';
 import * as THREE from 'three';
 import { ToneMappingMode } from 'postprocessing';
 
-export default function Experience() {
+export default function Experience({ onFirstFrame }) {
     const computer = useGLTF('./BedRoomCombo.glb');
 
     const skyboxTexture = useCubeTexture(
@@ -55,8 +55,19 @@ export default function Experience() {
         window.tvStationRotation = tvStationRotation;
     }, [setCamera]);
 
+    // ✅ Skybox set + baked static rotation (degrees -> radians)
     useEffect(() => {
         scene.background = skyboxTexture;
+
+        const skyYaw = -19;
+        const skyPitch = -51;
+        const skyRoll = -23;
+
+        scene.backgroundRotation.set(
+            THREE.MathUtils.degToRad(skyPitch),
+            THREE.MathUtils.degToRad(skyYaw),
+            THREE.MathUtils.degToRad(skyRoll)
+        );
     }, [scene, skyboxTexture]);
 
     useEffect(() => {
@@ -103,10 +114,19 @@ export default function Experience() {
             }
         };
 
-        setTimeout(showButtons, 3000);
+        setTimeout(showButtons, 100); // ✅ you said 100ms fixes it
     }, []);
 
+    // ✅ First frame signal (prevents black-gap)
+    const didFirstFrame = useRef(false);
+
     useFrame(() => {
+        // fire once on the first real render frame
+        if (!didFirstFrame.current) {
+            didFirstFrame.current = true;
+            if (typeof onFirstFrame === 'function') onFirstFrame();
+        }
+
         const currentPosition = new THREE.Vector3(...position.get());
         cameraRef.current.position.lerp(currentPosition, 0.1);
 

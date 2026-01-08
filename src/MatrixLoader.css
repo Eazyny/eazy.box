@@ -1,97 +1,160 @@
+/* Fullscreen overlay wrapper (what your Loader should render at the top level) */
+.matrix-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  opacity: 1;
+  transition: opacity 300ms ease;
+  pointer-events: all; /* IMPORTANT: block clicks while loading */
+}
+
+/* Fade out state */
+.matrix-loader-overlay.is-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Inner container */
 .matrix-loader {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    overflow: hidden;
-    color: #00ff00;
-    font-family: 'Oxanium', Courier, monospace;
-  }
-  
-  .matrix-rain {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    overflow: hidden;
-    z-index: 1;
-  }
-  
-  .matrix-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    animation: rain 1.5s linear infinite;
-    animation-delay: calc(-1s * var(--index));
-  }
-  
-  .matrix-column span {
-    opacity: 0.2;
-    animation: fade 2s linear infinite;
-  }
-  
-  .matrix-column:nth-child(odd) span {
-    opacity: 0.4;
-  }
-  
-  @keyframes rain {
-    0% {
-      transform: translateY(-100%);
-    }
-    100% {
-      transform: translateY(100%);
-    }
-  }
-  
-  @keyframes fade {
-    0%, 100% {
-      opacity: 0.2;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-  
-  .loader-container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-  }
-  
-  .loader-bar {
-    width: 80%;
-    height: 10px;
-    background: #004d00;
-    border-radius: 5px;
-    overflow: hidden;
-    margin: 10px auto;
-  }
-  
-  .loader-progress {
-    height: 100%;
-    background: #00ff00;
-    animation: glow 1s infinite alternate;
-  }
-  
-  @keyframes glow {
-    0% {
-      box-shadow: 0 0 5px #00ff00;
-    }
-    100% {
-      box-shadow: 0 0 20px #00ff00;
-    }
-  }
-  
-  .loader-text {
-    margin-top: 10px;
-    color: #00ff00;
-    font-size: 1.2rem;
-    text-shadow: 0 0 5px #00ff00;
-  }
-  
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  color: #00ff00;
+  font-family: 'Oxanium', Courier, monospace;
+}
+
+/* Rain layer behind UI */
+.matrix-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Canvas should fill screen if you're using MatrixRain.jsx canvas */
+.matrix-rain canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* If you're still using the old span-columns method anywhere, keep it working */
+.matrix-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  animation: rain 1.5s linear infinite;
+  animation-delay: calc(-1s * var(--index));
+}
+
+.matrix-column span {
+  opacity: 0.2;
+  animation: fade 2s linear infinite;
+}
+
+.matrix-column:nth-child(odd) span {
+  opacity: 0.4;
+}
+
+@keyframes rain {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes fade {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* UI layer (progress bar + percentage) */
+.loader-container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: min(640px, 92vw);
+  padding: 16px;
+}
+
+/* Progress bar */
+.loader-bar {
+  width: 100%;
+  height: 10px;
+  background: #004d00;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px auto;
+}
+
+.loader-progress {
+  height: 100%;
+  background: #00ff00;
+  box-shadow: 0 0 8px #00ff00;
+  transition: width 120ms linear;
+}
+
+.loader-text {
+  margin-top: 10px;
+  color: #00ff00;
+  font-size: 1.2rem;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+/* Hide your camera buttons while loader is active */
+body.is-loading .camera-buttons {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ---- Legacy classes (neutralized so they don't interfere) ---- */
+/* You had these before; leaving them here so nothing breaks if referenced */
+.matrix-overlay {
+  display: none;
+}
+
+.loading-text {
+  display: none;
+}
+
+/* --- Make loader ALWAYS top-most --- */
+.matrix-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647; /* max-safe "always on top" */
+  background: #000;
+  opacity: 1;
+  transition: opacity 300ms ease;
+  pointer-events: all;
+}
+
+/* Fade out state */
+.matrix-loader-overlay.is-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- While loading, NOTHING from drei Html should show through --- */
+/* These classes come from your Experience.jsx wrapperClass props */
+body.is-loading .htmlScreen,
+body.is-loading .youtubeScreen,
+body.is-loading .BlockchaineazyScreen {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Keep camera buttons hidden while loading (you already had this) */
+body.is-loading .camera-buttons {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

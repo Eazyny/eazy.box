@@ -1,30 +1,22 @@
-import { Html, useProgress } from '@react-three/drei';
-import './MatrixLoader.css'; // Add this CSS for styling
+import MatrixRain from './MatrixRain';
+import './MatrixLoader.css';
 
-function Loader() {
-  const { progress } = useProgress();
-
+export default function Loader({ progress = 0, fading = false }) {
   return (
-    <Html center>
+    <div className={`matrix-loader-overlay ${fading ? 'is-fading' : ''}`}>
       <div className="matrix-loader">
-        <div className="matrix-rain">
-          {[...Array(20)].map((_, i) => (
-            <span key={i} className="matrix-column">
-              {''.split('').map((char, j) => (
-                <span key={j}>{char}</span>
-              ))}
-            </span>
-          ))}
-        </div>
+        <MatrixRain />
+
         <div className="loader-container">
           <div className="loader-bar">
-            <div className="loader-progress" style={{ width: `${progress}%` }}></div>
+            <div
+              className="loader-progress"
+              style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
+            />
           </div>
-          <p className="loader-text"> {progress.toFixed(2)}%</p>
+          <p className="loader-text">{Math.round(progress)}%</p>
         </div>
       </div>
-    </Html>
+    </div>
   );
 }
-
-export default Loader;

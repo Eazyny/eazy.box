@@ -58,3 +58,10 @@ body,
 .camera-buttons .spaced {
     margin: 20px 30px;
 }
+
+.post-load-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
