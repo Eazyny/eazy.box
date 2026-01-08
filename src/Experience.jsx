@@ -183,7 +183,7 @@ export default function Experience({ onFirstFrame }) {
         x: 0.85,
         y: 2.29,
         z: -1.85,
-        rotXdeg: -3.0,
+        rotXdeg: -24.0,
         rotYdeg: -2.5,
         rotZdeg: 0,
         width: 3.65,
